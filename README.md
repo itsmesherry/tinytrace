@@ -111,9 +111,18 @@ for one goal: the most faithful picture in a fixed number of characters.
 
 ## Example: a picture backdrop for the Claude desktop app
 
-[examples/claude-backdrop](https://github.com/itsmesherry/tinytrace/tree/main/examples/claude-backdrop) is a Claude desktop mod
-that shows a slideshow of your own pictures behind the chat. The app caps a
-backdrop scene at 131,072 characters, which is where tinytrace came from.
+[examples/claude-backdrop](https://github.com/itsmesherry/tinytrace/tree/main/examples/claude-backdrop)
+is a Claude desktop mod that shows a slideshow of pictures behind the chat. The
+app caps a backdrop scene at 131,072 characters, which is where tinytrace came
+from. It comes with three sample slides; install it with Claude Code and restart
+the app:
+
+```bash
+claude plugin marketplace add itsmesherry/tinytrace
+claude plugin install picture-backdrop@tinytrace
+```
+
+Its README shows how to use your own pictures.
 
 ## Credits
 
