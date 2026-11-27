@@ -10,6 +10,8 @@ All notable changes to this project are recorded here. The format follows
 
 ### Added
 
+- Published on PyPI as `tinytrace-svg` (PyPI doesn't allow the name `tinytrace`);
+  the module and command are `tinytrace`.
 - `tinytrace.trace(image, budget, colors, cover)`: trace a picture into the
   best-looking SVG that fits a character budget.
 - `tinytrace` command line tool.

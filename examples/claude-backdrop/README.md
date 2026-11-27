@@ -29,7 +29,7 @@ local copy instead:
 
 ```bash
 git clone https://github.com/itsmesherry/tinytrace.git
-pip install tinytrace
+pip install tinytrace-svg
 python tinytrace/examples/claude-backdrop/make_slides.py ~/Pictures/backdrops
 claude plugin marketplace add ./tinytrace
 claude plugin install picture-backdrop@tinytrace

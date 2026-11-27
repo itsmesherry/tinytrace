@@ -6,9 +6,9 @@
 </p>
 
 <p align="center">
-  <a href="https://pypi.org/project/tinytrace/"><img alt="PyPI" src="https://img.shields.io/pypi/v/tinytrace"></a>
+  <a href="https://pypi.org/project/tinytrace-svg/"><img alt="PyPI" src="https://img.shields.io/pypi/v/tinytrace-svg"></a>
   <a href="https://github.com/itsmesherry/tinytrace/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/itsmesherry/tinytrace/actions/workflows/ci.yml/badge.svg"></a>
-  <a href="https://pypi.org/project/tinytrace/"><img alt="Python" src="https://img.shields.io/badge/python-3.10%20%7C%203.11%20%7C%203.12%20%7C%203.13-blue"></a>
+  <a href="https://pypi.org/project/tinytrace-svg/"><img alt="Python" src="https://img.shields.io/badge/python-3.10%20%7C%203.11%20%7C%203.12%20%7C%203.13-blue"></a>
   <a href="https://github.com/itsmesherry/tinytrace/blob/main/LICENSE"><img alt="License" src="https://img.shields.io/badge/license-MIT-blue"></a>
 </p>
 
@@ -25,7 +25,7 @@ what you want when an SVG has a hard limit: an inline image on a web page, an
 email, a config file, or a desktop backdrop with a size cap.
 
 ```bash
-pip install tinytrace
+pip install tinytrace-svg   # the package on PyPI; the module and command are tinytrace
 tinytrace picture.jpg --budget 125000
 # picture.svg: 124,612 characters (budget 125,000), 9s
 ```
