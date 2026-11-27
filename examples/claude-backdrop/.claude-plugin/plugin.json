@@ -1,6 +1,6 @@
 {
   "name": "picture-backdrop",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A slideshow of your own pictures behind the Claude desktop app's chat, traced by tinytrace so it idles cool. /backdrop on, off or next.",
   "author": {
     "name": "Shehryar Sohail"

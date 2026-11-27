@@ -76,7 +76,7 @@ this size tinytrace keeps them recognisable rather than photographic.
 | <img src="https://raw.githubusercontent.com/itsmesherry/tinytrace/main/docs/images/bunny.jpg" width="400" alt="Original: a Big Buck Bunny frame"> | <img src="https://raw.githubusercontent.com/itsmesherry/tinytrace/main/docs/images/bunny.svg" width="400" alt="tinytrace SVG of a Big Buck Bunny frame, 125,000 characters"> |
 | <img src="https://raw.githubusercontent.com/itsmesherry/tinytrace/main/docs/images/wave.jpg" width="400" alt="Original: Hokusai's Great Wave print"> | <img src="https://raw.githubusercontent.com/itsmesherry/tinytrace/main/docs/images/wave.svg" width="400" alt="tinytrace SVG of Hokusai's Great Wave print, 125,000 characters"> |
 | <img src="https://raw.githubusercontent.com/itsmesherry/tinytrace/main/docs/images/poster.jpg" width="400" alt="Original: Toulouse-Lautrec's Divan Japonais poster"> | <img src="https://raw.githubusercontent.com/itsmesherry/tinytrace/main/docs/images/poster.svg" width="400" alt="tinytrace SVG of Toulouse-Lautrec's Divan Japonais poster, 125,000 characters"> |
-| <img src="https://raw.githubusercontent.com/itsmesherry/tinytrace/main/docs/images/street.jpg" width="400" alt="Original: a city street at night"> | <img src="https://raw.githubusercontent.com/itsmesherry/tinytrace/main/docs/images/street.svg" width="400" alt="tinytrace SVG of a city street at night, 125,000 characters"> |
+| <img src="https://raw.githubusercontent.com/itsmesherry/tinytrace/main/docs/images/sunset.jpg" width="400" alt="Original: a hot-air balloon against a sunset"> | <img src="https://raw.githubusercontent.com/itsmesherry/tinytrace/main/docs/images/sunset.svg" width="400" alt="tinytrace SVG of a hot-air balloon against a sunset, 125,000 characters"> |
 
 ## Options
 
@@ -134,8 +134,8 @@ Example pictures, each under its own licence (the MIT licence covers the code on
 - *Under the Wave off Kanagawa*, Katsushika Hokusai, and *Divan Japonais*,
   Henri de Toulouse-Lautrec: public domain, from
   [The Metropolitan Museum of Art](https://www.metmuseum.org/about-the-met/policies-and-documents/open-access).
-- City at night: photo by Jeff Golenski,
-  [WordPress Photo Directory](https://wordpress.org/photos/photo/3016a7fb59/), CC0.
+- Hot-air balloon at sunset: photo by vgnavada,
+  [WordPress Photo Directory](https://wordpress.org/photos/photo/5236a284de/), CC0.
 
 ## License
 

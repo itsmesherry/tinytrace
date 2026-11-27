@@ -20,7 +20,7 @@ import tinytrace
 
 DOCS = Path(__file__).parent
 SAMPLES, IMAGES = DOCS / "samples", DOCS / "images"
-ORDER = ["bunny", "wave", "poster", "street"]
+ORDER = ["bunny", "wave", "poster", "sunset"]
 # Where the hero splits picture from SVG, as a share of the width: through the middle of the bunny.
 HERO_SPLIT = 0.36
 

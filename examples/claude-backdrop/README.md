@@ -64,5 +64,5 @@ all the time.
   version of the frame.
 - *Under the Wave off Kanagawa*, Katsushika Hokusai: public domain, from
   [The Metropolitan Museum of Art](https://www.metmuseum.org/art/collection/search/36491).
-- City at night: photo by Jeff Golenski,
-  [WordPress Photo Directory](https://wordpress.org/photos/photo/3016a7fb59/), CC0.
+- Hot-air balloon at sunset: photo by vgnavada,
+  [WordPress Photo Directory](https://wordpress.org/photos/photo/5236a284de/), CC0.
