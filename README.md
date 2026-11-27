@@ -36,22 +36,31 @@ svg = tinytrace.trace("picture.jpg", budget=125_000)
 
 ## How it compares
 
-At the same 125,000-character budget, against
-[vtracer](https://github.com/visioncortex/vtracer) given a fair search over its
-own detail settings (input size, speck size, stacked or cutout), on 23 pictures
-tinytrace was not tuned on:
+The same frame traced by [vtracer](https://github.com/visioncortex/vtracer) and
+by tinytrace, both held to 125,000 characters:
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/itsmesherry/tinytrace/main/docs/images/comparison.jpg" alt="A Big Buck Bunny frame, then vtracer's and tinytrace's SVGs of it at 125,000 characters, with a zoom on the bunny's face" width="100%">
+</p>
+
+vtracer has no size setting, so it gets a fair search over its own: input size,
+speck size, how much it merges similar colours, and stacked or cutout layers.
+Of the 144 combinations, the one that scores best against the picture counts.
+On 23 pictures tinytrace was not tuned on:
 
 | Pictures | Colour error ↓ | Shape match ↑ | Outlines kept ↑ |
 | --- | :---: | :---: | :---: |
-| Cartoons (6) | **1.51** vs 2.19 | **0.98** vs 0.97 | **0.95** vs 0.86 |
-| Digital art (4) | **2.79** vs 9.18 | **0.91** vs 0.80 | **0.71** vs 0.41 |
-| Photos (13) | **3.87** vs 11.67 | **0.89** vs 0.72 | **0.71** vs 0.37 |
+| Cartoons (6) | **1.51** vs 2.08 | **0.98** vs 0.97 | **0.95** vs 0.89 |
+| Digital art (4) | **2.79** vs 7.47 | **0.91** vs 0.82 | **0.71** vs 0.48 |
+| Photos (13) | **3.86** vs 8.92 | **0.89** vs 0.75 | **0.71** vs 0.47 |
 
-tinytrace scored better on 21 of the 23. It lost on two very flat cartoons,
-where vtracer is near perfect in far fewer characters. Colour error is the mean
-CIE Lab difference after a light blur (about 2 is barely visible), shape match
-is SSIM, and outlines kept is the share of the picture's strong edges the SVG
-also has. See [bench/](https://github.com/itsmesherry/tinytrace/tree/main/bench) to run it on your own pictures.
+Per picture, tinytrace scored better on all three on 17 of the 23, and had the
+lower colour error on 19. vtracer was a little more accurate in colour on four
+very flat cartoons, where it needs far fewer characters. Colour error is the
+mean CIE Lab difference after a light blur (about 2 is barely visible), shape
+match is SSIM, and outlines kept is the share of the picture's strong edges the
+SVG also has. See [bench/](https://github.com/itsmesherry/tinytrace/tree/main/bench)
+to run it on your own pictures.
 
 Photos come out painterly. Any tracer turns a photo into flat shapes, and at
 this size tinytrace keeps them recognisable rather than photographic.
