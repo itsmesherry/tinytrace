@@ -73,7 +73,7 @@ def _despeckle(lbl: NDArray[np.int32], min_area: int) -> NDArray[np.int32]:
         return lbl
     _, idx = cv2.distanceTransformWithLabels(1 - keep, cv2.DIST_L2, 3, labelType=cv2.DIST_LABEL_PIXEL)
     ys, xs = np.nonzero(keep)
-    near = np.zeros(idx.max() + 1, np.int32)
+    near = np.zeros(int(idx.max()) + 1, np.int32)
     near[idx[ys, xs]] = lbl[ys, xs]
     out: NDArray[np.int32] = near[idx]
     return out
