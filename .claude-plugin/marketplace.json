@@ -1,0 +1,5 @@
+{
+  "name": "tinytrace",
+  "owner": { "name": "Shehryar Sohail" },
+  "plugins": [{ "name": "picture-backdrop", "source": "./examples/claude-backdrop" }]
+}

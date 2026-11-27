@@ -1,0 +1,72 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "tinytrace"
+version = "0.1.0"
+description = "Turn a picture into the best-looking SVG that fits a fixed size budget"
+readme = "README.md"
+requires-python = ">=3.10"
+license = "MIT"
+authors = [
+    {name = "Shehryar Sohail", email = "sherryyatwork@gmail.com"}
+]
+keywords = ["svg", "vectorize", "vectorization", "trace", "image-tracing", "raster-to-vector", "png-to-svg", "jpg-to-svg"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Multimedia :: Graphics :: Graphics Conversion",
+    "Typing :: Typed",
+]
+dependencies = [
+    "numpy>=1.24",
+    "opencv-python-headless>=4.8",
+]
+
+[project.optional-dependencies]
+bench = [
+    "scikit-image>=0.22",
+    "vtracer>=0.6",
+]
+dev = [
+    "pytest>=8.0",
+    "ruff>=0.10",
+    "mypy>=1.10",
+    "build>=1.0",
+    "twine>=5.0",
+]
+
+[project.scripts]
+tinytrace = "tinytrace.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/itsmesherry/tinytrace"
+Repository = "https://github.com/itsmesherry/tinytrace"
+Changelog = "https://github.com/itsmesherry/tinytrace/blob/main/CHANGELOG.md"
+Issues = "https://github.com/itsmesherry/tinytrace/issues"
+
+[tool.setuptools.packages.find]
+include = ["tinytrace*"]
+
+[tool.setuptools.package-data]
+tinytrace = ["py.typed"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 120
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "I"]
+
+[tool.mypy]
+strict = true
+ignore_missing_imports = true
