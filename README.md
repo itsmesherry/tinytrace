@@ -1,8 +1,8 @@
 <h1 align="center">tinytrace</h1>
 
 <p align="center">
-  Turn a picture into the best-looking SVG that fits a size budget.<br>
-  You pick how many characters the SVG may have. tinytrace makes the most of them.
+  Convert PNG and JPG images to SVG that fits a size budget.<br>
+  You pick how many characters the SVG may have. tinytrace makes the best-looking picture that fits.
 </p>
 
 <p align="center">
@@ -13,11 +13,13 @@
 </p>
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/itsmesherry/tinytrace/main/docs/images/hero.jpg" alt="A picture beside its tinytrace SVG" width="100%">
+  <img src="https://raw.githubusercontent.com/itsmesherry/tinytrace/main/docs/images/hero.jpg" alt="Big Buck Bunny split down the middle: the original frame on the left, its tinytrace SVG on the right" width="100%">
 </p>
 
-Most tracers try to match the picture and let the SVG grow as large as it needs
-to. tinytrace works the other way round: you fix the size first, say "under
+tinytrace is an image vectorizer: a Python library and command line tool that
+traces raster pictures (PNG, JPG, WebP and more) into vector SVG. Most tracers
+try to match the picture and let the SVG grow as large as it needs to. tinytrace
+works the other way round: you fix the size first, say "under
 125,000 characters", and it finds the most faithful picture that fits. That's
 what you want when an SVG has a hard limit: an inline image on a web page, an
 email, a config file, or a desktop backdrop with a size cap.
@@ -71,10 +73,10 @@ this size tinytrace keeps them recognisable rather than photographic.
 
 | Picture | tinytrace, 125,000 characters |
 | --- | --- |
-| <img src="https://raw.githubusercontent.com/itsmesherry/tinytrace/main/docs/images/bunny.jpg" width="400"> | <img src="https://raw.githubusercontent.com/itsmesherry/tinytrace/main/docs/images/bunny.svg" width="400"> |
-| <img src="https://raw.githubusercontent.com/itsmesherry/tinytrace/main/docs/images/wave.jpg" width="400"> | <img src="https://raw.githubusercontent.com/itsmesherry/tinytrace/main/docs/images/wave.svg" width="400"> |
-| <img src="https://raw.githubusercontent.com/itsmesherry/tinytrace/main/docs/images/poster.jpg" width="400"> | <img src="https://raw.githubusercontent.com/itsmesherry/tinytrace/main/docs/images/poster.svg" width="400"> |
-| <img src="https://raw.githubusercontent.com/itsmesherry/tinytrace/main/docs/images/street.jpg" width="400"> | <img src="https://raw.githubusercontent.com/itsmesherry/tinytrace/main/docs/images/street.svg" width="400"> |
+| <img src="https://raw.githubusercontent.com/itsmesherry/tinytrace/main/docs/images/bunny.jpg" width="400" alt="Original: a Big Buck Bunny frame"> | <img src="https://raw.githubusercontent.com/itsmesherry/tinytrace/main/docs/images/bunny.svg" width="400" alt="tinytrace SVG of a Big Buck Bunny frame, 125,000 characters"> |
+| <img src="https://raw.githubusercontent.com/itsmesherry/tinytrace/main/docs/images/wave.jpg" width="400" alt="Original: Hokusai's Great Wave print"> | <img src="https://raw.githubusercontent.com/itsmesherry/tinytrace/main/docs/images/wave.svg" width="400" alt="tinytrace SVG of Hokusai's Great Wave print, 125,000 characters"> |
+| <img src="https://raw.githubusercontent.com/itsmesherry/tinytrace/main/docs/images/poster.jpg" width="400" alt="Original: Toulouse-Lautrec's Divan Japonais poster"> | <img src="https://raw.githubusercontent.com/itsmesherry/tinytrace/main/docs/images/poster.svg" width="400" alt="tinytrace SVG of Toulouse-Lautrec's Divan Japonais poster, 125,000 characters"> |
+| <img src="https://raw.githubusercontent.com/itsmesherry/tinytrace/main/docs/images/street.jpg" width="400" alt="Original: a city street at night"> | <img src="https://raw.githubusercontent.com/itsmesherry/tinytrace/main/docs/images/street.svg" width="400" alt="tinytrace SVG of a city street at night, 125,000 characters"> |
 
 ## Options
 

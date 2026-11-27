@@ -5,14 +5,14 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "tinytrace"
 version = "0.1.0"
-description = "Turn a picture into the best-looking SVG that fits a fixed size budget"
+description = "Convert PNG and JPG images to SVG that fits a size budget: an image vectorizer library and CLI"
 readme = "README.md"
 requires-python = ">=3.10"
 license = "MIT"
 authors = [
     {name = "Shehryar Sohail", email = "sherryyatwork@gmail.com"}
 ]
-keywords = ["svg", "vectorize", "vectorization", "trace", "image-tracing", "raster-to-vector", "png-to-svg", "jpg-to-svg"]
+keywords = ["svg", "png-to-svg", "jpg-to-svg", "image-to-svg", "vectorize", "vectorizer", "vectorization", "image-tracing", "raster-to-vector", "svg-size"]
 classifiers = [
     "Development Status :: 4 - Beta",
     "Intended Audience :: Developers",
