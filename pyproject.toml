@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "tinytrace-svg"
-version = "0.1.0"
+version = "0.1.1"
 description = "Convert PNG and JPG images to SVG that fits a size budget: an image vectorizer library and CLI"
 readme = "README.md"
 requires-python = ">=3.10"
