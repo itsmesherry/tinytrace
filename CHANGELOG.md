@@ -6,6 +6,8 @@ All notable changes to this project are recorded here. The format follows
 
 ## [Unreleased]
 
+## [0.1.2] - 2026-11-28
+
 ### Changed
 
 - Tracing is about 20% faster again (bunny 5.3 s to 3.9 s, sunset 5.5 s to 3.7 s
