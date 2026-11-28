@@ -6,6 +6,11 @@ All notable changes to this project are recorded here. The format follows
 
 ## [Unreleased]
 
+### Changed
+
+- Tracing is about twice as fast (bunny 9.9 s to 5.3 s, poster 14.2 s to 7.7 s on
+  an Apple M1). The SVGs are byte for byte the same as before.
+
 ## [0.1.0] - 2026-11-27
 
 ### Added

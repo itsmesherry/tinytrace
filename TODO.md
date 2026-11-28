@@ -16,8 +16,9 @@ want to pick one up.
 - [ ] Reduce visible banding in smooth gradients such as skies, for example by
       spending more palette colours where the picture changes slowly
       ([#4](https://github.com/itsmesherry/tinytrace/issues/4))
-- [ ] Trace faster: about 10 s per picture today, whatever its size, mostly in
-      the 7-step search for the budget ([#5](https://github.com/itsmesherry/tinytrace/issues/5))
+- [ ] Trace faster: about 5 to 8 s per picture today (down from 10 to 14 s),
+      whatever its size. About 3.5 s is preparing the picture, the rest the 7-step
+      search for the budget ([#5](https://github.com/itsmesherry/tinytrace/issues/5))
 - [ ] See whether Bézier curves beat polygons at larger budgets (polygons won
       at 125,000 characters) ([#7](https://github.com/itsmesherry/tinytrace/issues/7))
 
