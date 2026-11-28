@@ -6,6 +6,12 @@ All notable changes to this project are recorded here. The format follows
 
 ## [Unreleased]
 
+### Changed
+
+- Tracing is about 20% faster again (bunny 5.3 s to 3.9 s, sunset 5.5 s to 3.7 s
+  on an Apple M1): layers are traced on threads, except under Pyodide. The SVGs
+  are byte for byte the same as before.
+
 ## [0.1.1] - 2026-11-28
 
 ### Changed

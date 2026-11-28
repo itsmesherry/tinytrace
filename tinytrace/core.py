@@ -22,14 +22,17 @@ How, in order:
 from __future__ import annotations
 
 import os
-from collections.abc import Iterator
-from typing import Union
+import sys
+from collections.abc import Callable, Iterable
+from concurrent.futures import ThreadPoolExecutor
+from typing import TypeVar, Union
 
 import cv2
 import numpy as np
 from numpy.typing import NDArray
 
 Image = Union[str, "os.PathLike[str]", NDArray[np.uint8]]
+T = TypeVar("T")
 
 WIDTH = 1920
 # Tall pictures are worked on at the same pixel count as a 4:3 one, not 1920 wide, or they couldn't fit a budget.
@@ -85,26 +88,42 @@ def _despeckle(lbl: NDArray[np.int32], min_area: int) -> NDArray[np.int32]:
     return out
 
 
-def _masks(lbl: NDArray[np.int32], order: list[int]) -> Iterator[NDArray[np.uint8]]:
-    # Layer i may cover pixels of later layers (they paint over it), never an earlier layer's pixels: its mask is
-    # everything except the parts of "not this colour" connected to earlier pixels, grown 1px under later layers.
-    rank = np.empty(int(lbl.max()) + 1, np.min_scalar_type(len(order)))
-    rank[order] = np.arange(len(order))
-    r = rank[lbl]
-    cross = cv2.getStructuringElement(cv2.MORPH_CROSS, (3, 3))
-    yield np.ones(lbl.shape, np.uint8)
-    for i in range(1, len(order)):
-        n, comp = cv2.connectedComponents((r != i).astype(np.uint8), connectivity=4)
-        # Every 4-connected piece of the earlier pixels has an edge pixel and one label throughout, so reading the
-        # labels on the edge alone finds every component they touch.
-        earlier = (r < i).astype(np.uint8)
-        edge = earlier > cv2.erode(earlier, cross)
-        blocked = np.zeros(n, bool)
-        blocked[comp[edge]] = True
-        blocked[0] = False
+def _map(f: Callable[[int], T], items: Iterable[int]) -> list[T]:
+    # In order, on threads: OpenCV and most NumPy calls release the GIL. Pyodide can't start threads.
+    if sys.platform == "emscripten":
+        return list(map(f, items))
+    with ThreadPoolExecutor() as pool:
+        return list(pool.map(f, items))
+
+
+def _mask(r: NDArray[np.integer], i: int) -> NDArray[np.uint8]:
+    # r: each pixel's layer. Layer i may cover pixels of later layers (they paint over it), never an earlier layer's
+    # pixels: its mask is everything except the parts of "not this colour" connected to earlier pixels, grown 1px
+    # under later layers.
+    if i == 0:
+        return np.ones(r.shape, np.uint8)
+    n, comp, stats, _ = cv2.connectedComponentsWithStats((r != i).astype(np.uint8), connectivity=4)
+    # Every 4-connected piece of the earlier pixels has an edge pixel and one label throughout, so reading the
+    # labels on the edge alone finds every component they touch.
+    earlier = (r < i).astype(np.uint8)
+    edge = earlier > cv2.erode(earlier, cv2.getStructuringElement(cv2.MORPH_CROSS, (3, 3)))
+    blocked = np.zeros(n, bool)
+    blocked[comp[edge]] = True
+    blocked[0] = False
+    # Label 0 is this layer's own pixels. Most layers keep no other component, or a few: fill those in from their
+    # boxes rather than looking up every pixel's label.
+    kept = np.flatnonzero(~blocked)[1:]
+    if len(kept) > 64:  # ponytail: box-by-box stops paying off somewhere past this; not tuned
         m = ~blocked[comp]
-        grown = cv2.dilate(m.astype(np.uint8), np.ones((3, 3), np.uint8)) > 0
-        yield (m | (grown & (r > i))).astype(np.uint8)
+    else:
+        m = r == i
+        for c in kept:
+            x, y, w, h = stats[c, :4]
+            box = (slice(y, y + h), slice(x, x + w))
+            m[box] |= comp[box] == c
+    grown = cv2.dilate(m.astype(np.uint8), np.ones((3, 3), np.uint8)) > 0
+    out: NDArray[np.uint8] = (m | (grown & (r > i))).astype(np.uint8)
+    return out
 
 
 def _outline(mask: NDArray[np.uint8], eps: float) -> str:
@@ -119,15 +138,13 @@ def _outline(mask: NDArray[np.uint8], eps: float) -> str:
         # Small specks keep a few corners instead of collapsing to nothing.
         if len(approx) < 4 and len(contour) >= 4:
             approx = cv2.approxPolyDP(contour, eps / 2, True)
-        pts: list[tuple[int, int]] = []
-        for x, y in approx.reshape(-1, 2):
-            p = (round((x + 0.5) / 2), round((y + 0.5) / 2))
-            if not pts or p != pts[-1]:
-                pts.append(p)
+        # (x + 0.5) / 2 is never a tie, so np.round rounds as Python's round does. Repeated points are dropped.
+        pts = np.round((approx.reshape(-1, 2) + 0.5) / 2).astype(np.int64)
+        pts = pts[np.r_[True, (np.diff(pts, axis=0) != 0).any(1)]]
         if len(pts) < 3:
             continue
-        x0, y0 = pts[0]
-        steps = " ".join(f"{x - a} {y - b}" for (a, b), (x, y) in zip(pts, pts[1:]))
+        x0, y0 = int(pts[0, 0]), int(pts[0, 1])
+        steps = " ".join(map(str, np.diff(pts, axis=0).ravel().tolist()))
         d.append((f"m{x0 - px} {y0 - py}" if d else f"M{x0} {y0}") + "l" + steps + "z")
         px, py = x0, y0
     return "".join(d).replace(" -", "-")
@@ -206,10 +223,13 @@ def _build(lbl: NDArray[np.int32], centers: NDArray[np.float32], inks: int, s: f
     order = sorted((c for c in range(n - inks) if area[c]), key=lambda c: -area[c])
     order += sorted((c for c in range(n - inks, n) if area[c]), key=lambda c: -area[c])
     rgb = cv2.cvtColor(np.clip(centers, 0, 255).reshape(1, -1, 3).astype(np.uint8), cv2.COLOR_LAB2RGB)[0]
+    rank = np.empty(n, np.min_scalar_type(len(order)))
+    rank[order] = np.arange(len(order))
+    r = rank[lbl]
+    outlines = _map(lambda i: _outline(_mask(r, i), s), range(len(order)))
     fit = ' preserveAspectRatio="xMidYMid slice"' if cover else ""
     parts = [f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {w} {h}"{fit}>']
-    for c, m in zip(order, _masks(lbl, order)):
-        d = _outline(m, s)
+    for c, d in zip(order, outlines):
         if d:
             color = "#%02x%02x%02x" % tuple(int(v) for v in rgb[c])
             parts.append(f'<path fill-rule="evenodd" fill="{color}" d="{d}"/>')
