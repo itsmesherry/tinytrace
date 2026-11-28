@@ -29,5 +29,5 @@ want to pick one up.
 
 ## Project
 
-- [ ] Show a download count badge in the README once pepy lists
+- [x] Show a download count badge in the README once pepy lists
       `tinytrace-svg` ([#1](https://github.com/itsmesherry/tinytrace/issues/1))
