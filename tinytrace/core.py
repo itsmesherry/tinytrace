@@ -236,6 +236,44 @@ def _build(lbl: NDArray[np.int32], centers: NDArray[np.float32], inks: int, s: f
     return "".join(parts) + "</svg>"
 
 
+def _search(build: Callable[[float], str], budget: int, finest: float = 0.4, coarsest: float = 4.0) -> str | None:
+    # The finest tolerance s in [finest, coarsest] whose SVG fits the budget (coarser = fewer characters). The size
+    # falls roughly as a power of s, so each guess interpolates log(size) against log(s) between the nearest sizes
+    # over and under the budget, or assumes size ~ 1/s while only one side is known. Stops at a fit within 2% of the
+    # budget, or after 7 builds.
+    over: tuple[float, int] | None = None  # the coarsest s found over budget, and its size
+    fit: tuple[float, int, str] | None = None  # the finest s found that fits, its size and SVG
+    s, aim = 2.2, 0.99 * budget
+    for _ in range(7):
+        svg = build(s)
+        if len(svg) <= budget:
+            if fit is None or s < fit[0]:
+                fit = (s, len(svg), svg)
+            if len(svg) >= 0.98 * budget:
+                break
+        elif over is None or s > over[0]:
+            over = (s, len(svg))
+        if fit and over:
+            if over[0] >= fit[0]:  # sizes out of order: keep the fit
+                break
+            lo, hi = np.log(over[0]), np.log(fit[0])
+            t = (np.log(aim) - np.log(over[1])) / (np.log(fit[1]) - np.log(over[1]))
+            nxt = float(np.exp(lo + min(max(t, 0.05), 0.95) * (hi - lo)))  # stay inside the bracket
+        elif fit:
+            if fit[0] <= finest:
+                break
+            nxt = max(finest, fit[0] * fit[1] / aim)
+        else:
+            assert over is not None
+            if over[0] >= coarsest:
+                break
+            nxt = min(coarsest, over[0] * over[1] / aim)
+        if abs(nxt - s) < 1e-3 * s:
+            break
+        s = nxt
+    return fit[2] if fit else None
+
+
 def trace(image: Image, budget: int = 125_000, colors: int = 40, cover: bool = False) -> str:
     """Trace ``image`` into an SVG string of at most ``budget`` characters.
 
@@ -256,15 +294,7 @@ def trace(image: Image, budget: int = 125_000, colors: int = 40, cover: bool = F
     if colors < 2:
         raise ValueError("colors must be at least 2")
     lbl, centers, inks = _prepare(_load(image), colors)
-    # Coarser = fewer characters: search for the finest that fits.
-    lo, hi, best = 0.4, 4.0, None
-    for _ in range(7):
-        mid = (lo + hi) / 2
-        svg = _build(lbl, centers, inks, mid, cover)
-        if len(svg) <= budget:
-            hi, best = mid, svg
-        else:
-            lo = mid
+    best = _search(lambda s: _build(lbl, centers, inks, s, cover), budget)
     if best is None:
         raise BudgetTooSmall(f"even the coarsest tracing is over {budget} characters")
     return best

@@ -16,9 +16,6 @@ want to pick one up.
 - [ ] Reduce visible banding in smooth gradients such as skies, for example by
       spending more palette colours where the picture changes slowly
       ([#4](https://github.com/itsmesherry/tinytrace/issues/4))
-- [ ] Trace faster: about 4 to 7 s per picture today (down from 10 to 14 s),
-      whatever its size. About 1.5 to 2.5 s is preparing the picture, mostly
-      k-means; the rest is the 7-step search for the budget ([#5](https://github.com/itsmesherry/tinytrace/issues/5))
 - [ ] See whether Bézier curves beat polygons at larger budgets (polygons won
       at 125,000 characters) ([#7](https://github.com/itsmesherry/tinytrace/issues/7))
 
@@ -30,5 +27,7 @@ want to pick one up.
 
 ## Project
 
+- [x] Trace faster: about 3 s per picture, down from 10 to 14 s. Most of what's
+      left is k-means ([#5](https://github.com/itsmesherry/tinytrace/issues/5))
 - [x] Show a download count badge in the README once pepy lists
       `tinytrace-svg` ([#1](https://github.com/itsmesherry/tinytrace/issues/1))
