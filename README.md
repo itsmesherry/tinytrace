@@ -55,7 +55,7 @@ On 23 pictures tinytrace was not tuned on:
 | --- | :---: | :---: | :---: |
 | Cartoons (6) | **1.51** vs 2.08 | **0.98** vs 0.97 | **0.95** vs 0.89 |
 | Digital art (4) | **2.79** vs 7.47 | **0.91** vs 0.82 | **0.71** vs 0.48 |
-| Photos (13) | **3.86** vs 8.92 | **0.89** vs 0.75 | **0.71** vs 0.47 |
+| Photos (13) | **3.87** vs 8.92 | **0.89** vs 0.75 | **0.71** vs 0.47 |
 
 Per picture, tinytrace scored better on all three on 17 of the 23, and had the
 lower colour error on 19. vtracer was a little more accurate in colour on four
@@ -89,7 +89,7 @@ this size tinytrace keeps them recognisable rather than photographic.
 
 `trace()` takes a file path or an OpenCV-style BGR `uint8` array, and raises
 `tinytrace.BudgetTooSmall` when even the coarsest tracing is over the budget.
-A trace takes about 4 to 7 seconds on an Apple M1, whatever the picture's size.
+A trace takes about 3 seconds on an Apple M1, whatever the picture's size.
 
 ## How it works
 

@@ -11,6 +11,11 @@ All notable changes to this project are recorded here. The format follows
 - Tracing is about 20% faster again (bunny 5.3 s to 3.9 s, sunset 5.5 s to 3.7 s
   on an Apple M1): layers are traced on threads, except under Pyodide. The SVGs
   are byte for byte the same as before.
+- The search for the budget guesses each next coarseness from the sizes so far,
+  instead of halving the range 7 times: about 3 tracings per picture instead of 7,
+  and a trace takes about 3 s instead of 5 on the 23 benchmark pictures. The SVGs
+  change slightly. Benchmark scores are the same to two decimals, except the
+  photos' colour error, 3.86 to 3.87.
 
 ## [0.1.1] - 2026-11-28
 

@@ -109,3 +109,15 @@ def test_rendered_svg_looks_like_the_picture(picture: np.ndarray, svg: str, tmp_
 
     error = np.sqrt(((lab(picture) - lab(rendered)) ** 2).sum(2)).mean()
     assert error < 4, f"mean colour error {error:.2f}"
+
+
+def test_search_finds_the_finest_tolerance_that_fits() -> None:
+    from tinytrace.core import _search
+
+    def build(s: float) -> str:
+        return "x" * int(100_000 / s**1.3)  # size falls as a power of the tolerance, like a real tracing
+
+    svg = _search(build, 50_000)
+    assert svg is not None and 0.98 * 50_000 <= len(svg) <= 50_000
+    assert _search(build, 10) is None  # even the coarsest is over
+    assert _search(lambda s: "x", 50_000) == "x"  # everything fits: the finest is kept
