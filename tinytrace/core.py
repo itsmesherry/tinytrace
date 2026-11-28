@@ -63,12 +63,18 @@ def _majority(lbl: NDArray[np.int32], k: int) -> NDArray[np.int32]:
 def _despeckle(lbl: NDArray[np.int32], min_area: int) -> NDArray[np.int32]:
     # Specks smaller than min_area take the colour of the nearest larger region.
     keep = np.ones(lbl.shape, np.uint8)
+    flat = keep.reshape(-1)  # a view: writing to it marks keep
+    # Each colour's pixel indices, so each colour's specks are looked up on its own pixels, not the whole picture.
+    by_color = np.argsort(lbl.ravel().astype(np.min_scalar_type(lbl.max())), kind="stable")
+    counts = np.bincount(lbl.ravel())
+    ends = np.cumsum(counts)
     for c in range(int(lbl.max()) + 1):
         _, comp, stats, _ = cv2.connectedComponentsWithStats((lbl == c).astype(np.uint8), connectivity=8)
-        small = np.where(stats[:, cv2.CC_STAT_AREA] < min_area)[0]
-        small = small[small > 0]
-        if len(small):
-            keep[np.isin(comp, small)] = 0
+        small = stats[:, cv2.CC_STAT_AREA] < min_area
+        small[0] = False
+        if small.any():
+            px = by_color[ends[c] - counts[c] : ends[c]]
+            flat[px[small[comp.ravel()[px]]]] = 0
     if keep.all():
         return lbl
     _, idx = cv2.distanceTransformWithLabels(1 - keep, cv2.DIST_L2, 3, labelType=cv2.DIST_LABEL_PIXEL)
@@ -82,14 +88,19 @@ def _despeckle(lbl: NDArray[np.int32], min_area: int) -> NDArray[np.int32]:
 def _masks(lbl: NDArray[np.int32], order: list[int]) -> Iterator[NDArray[np.uint8]]:
     # Layer i may cover pixels of later layers (they paint over it), never an earlier layer's pixels: its mask is
     # everything except the parts of "not this colour" connected to earlier pixels, grown 1px under later layers.
-    rank = np.empty(int(lbl.max()) + 1, np.int32)
+    rank = np.empty(int(lbl.max()) + 1, np.min_scalar_type(len(order)))
     rank[order] = np.arange(len(order))
     r = rank[lbl]
+    cross = cv2.getStructuringElement(cv2.MORPH_CROSS, (3, 3))
     yield np.ones(lbl.shape, np.uint8)
     for i in range(1, len(order)):
         n, comp = cv2.connectedComponents((r != i).astype(np.uint8), connectivity=4)
+        # Every 4-connected piece of the earlier pixels has an edge pixel and one label throughout, so reading the
+        # labels on the edge alone finds every component they touch.
+        earlier = (r < i).astype(np.uint8)
+        edge = earlier > cv2.erode(earlier, cross)
         blocked = np.zeros(n, bool)
-        blocked[np.unique(comp[r < i])] = True
+        blocked[comp[edge]] = True
         blocked[0] = False
         m = ~blocked[comp]
         grown = cv2.dilate(m.astype(np.uint8), np.ones((3, 3), np.uint8)) > 0
@@ -144,7 +155,19 @@ def _prepare(src: NDArray[np.uint8], colors: int) -> tuple[NDArray[np.int32], ND
     small = cv2.resize(flat, (640, round(h * 640 / w)), interpolation=cv2.INTER_AREA)
     _, centers = _kmeans(cv2.cvtColor(small, cv2.COLOR_BGR2LAB).reshape(-1, 3).astype(np.float32), colors)
     flat_lab = cv2.cvtColor(flat, cv2.COLOR_BGR2LAB).astype(np.float32)
-    lbl = ((flat_lab[:, :, None, :] - centers[None, None]) ** 2).sum(3).argmin(2).astype(np.int32)
+    # Nearest centre per pixel, one centre at a time on separate channel planes: the same float32 sums, in the same
+    # order, as broadcasting all centres at once, without the pixels x centres temporary. Strict < keeps the first
+    # of equal distances, as argmin does.
+    planes = cv2.split(flat_lab)
+    lbl = np.zeros(flat_lab.shape[:2], np.int32)
+    best = np.full(flat_lab.shape[:2], np.inf, np.float32)
+    for c, center in enumerate(centers):
+        d = (planes[0] - center[0]) ** 2
+        d += (planes[1] - center[1]) ** 2
+        d += (planes[2] - center[2]) ** 2
+        closer = d < best
+        best[closer] = d[closer]
+        lbl[closer] = c
     lbl = _majority(lbl, 5)
 
     # Ink.

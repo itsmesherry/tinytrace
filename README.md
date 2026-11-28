@@ -89,7 +89,7 @@ this size tinytrace keeps them recognisable rather than photographic.
 
 `trace()` takes a file path or an OpenCV-style BGR `uint8` array, and raises
 `tinytrace.BudgetTooSmall` when even the coarsest tracing is over the budget.
-A trace takes about 10 seconds, whatever the picture's size.
+A trace takes about 5 to 8 seconds on an Apple M1, whatever the picture's size.
 
 ## How it works
 
